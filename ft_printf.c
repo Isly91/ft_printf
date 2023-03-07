@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/01 14:24:14 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/02/08 18:22:23 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/02/24 17:44:51 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_printf_flags(char input, va_list args)
 {
 	if (input == 's')
 		return (ft_putstring(va_arg(args, char *)));
+	else if (input == '%')
+		return (ft_putchar(37));
 	else if (input == 'c')
 		return (ft_putchar(va_arg(args, int)));
 	else if (input == 'p')
@@ -29,14 +31,15 @@ int	ft_printf_flags(char input, va_list args)
 		return (ft_putnumber(va_arg(args, int)));
 	else if (input == 'u')
 		return (ft_putunsigned(va_arg(args, unsigned int)));
-	else
+	else if (input == 'x' || input == 'X')
 	{
 		if (input == 'x')
 			return (ft_puthexa(va_arg(args, unsigned int), 'x'));
 		else
 			return (ft_puthexa(va_arg(args, unsigned int), 'X'));
 	}
-	return (0);
+	else
+		return (0);
 }
 
 int	ft_printf(const char *input, ...)
@@ -45,24 +48,24 @@ int	ft_printf(const char *input, ...)
 	int		e;
 	va_list	args;
 
-	i = 0;
+	i = -1;
 	e = 0;
 	va_start(args, input);
-	if (ft_check_input(input) == 0 || !input)
-		return (-1);
-	while (input[i] != '\0')
+	while (input[++i] != '\0')
 	{
 		if (input[i] == '%')
 		{
-			i++;
-			if (input[i] == '%')
-				e += ft_putchar('%');
+			if (input[++i] == '\0')
+				break ;
+			else if (!ft_strchr("cspdiuxX%", input[i]))
+				e += ft_putchar(input[i]);
 			else
 				e += ft_printf_flags(input[i], args);
 		}
 		else
 			e += ft_putchar(input[i]);
-		i++;
+		if (e < 0)
+			return (-1);
 	}
 	va_end(args);
 	return (e);

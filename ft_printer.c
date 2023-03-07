@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/07 10:22:42 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/02/08 18:23:33 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/02/24 14:03:24 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	ft_putstring(char *str)
 	while (str[i] != '\0')
 	{
 		count += ft_putchar(str[i]);
+		if (count < 0)
+			return (-1);
 		i++;
 	}
 	return (count);
@@ -35,6 +37,8 @@ int	ft_putpointer(size_t ptr)
 
 	count = 0;
 	count += write(1, "0x", 2);
+	if (count < 0)
+		return (-1);
 	count += ft_puthexa(ptr, 'x');
 	return (count);
 }
@@ -49,15 +53,21 @@ int	ft_putnumber(int number)
 	else if (number > 9)
 	{
 		count += ft_putnumber(number / 10);
+		if (count < 0)
+			return (-1);
 		count += ft_putnumber(number % 10);
 	}
 	else if (number < 0)
 	{
 		count += ft_putchar('-');
+		if (count < 0)
+			return (-1);
 		count += ft_putnumber(number * -1);
 	}
 	else
 		count += ft_putchar(number + '0');
+	if (count < 0)
+		return (-1);
 	return (count);
 }
 
@@ -69,8 +79,12 @@ int	ft_putunsigned(unsigned int number)
 	count = 0;
 	if (number > 9)
 		count += ft_putunsigned(number / 10);
+	if (count < 0)
+		return (-1);
 	unsigned_number_in_int = number % 10 + '0';
 	count += ft_putchar(unsigned_number_in_int);
+	if (count < 0)
+		return (-1);
 	return (count);
 }
 
@@ -87,9 +101,15 @@ int	ft_puthexa(size_t exa, char c)
 	if (exa >= 16)
 	{
 		count += ft_puthexa(exa / 16, c);
+		if (count < 0)
+			return (-1);
 		count += ft_puthexa(exa % 16, c);
+		if (count < 0)
+			return (-1);
 	}
 	else
 		count += ft_putchar(buffer[exa % 16]);
+	if (count < 0)
+		return (-1);
 	return (count);
 }

@@ -6,28 +6,39 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/02/01 16:22:10 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/02/08 18:17:39 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/02/24 17:39:37 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_check_input(const char *input)
+size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '%')
-		{
-			i++;
-			if (input[i] != 'X' && input[i] != 'x' && input[i] != 'c'
-				&& input[i] != 's' && input[i] != 'p' && input[i] != 'd'
-				&& input[i] != 'i' && input[i] != 'u' && input[i] != '%')
-				return (0);
-		}
+	while (s[i] != '\0')
 		i++;
+	return (i);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	int				i;
+	unsigned char	variable;
+
+	i = 0;
+	variable = (unsigned char) c;
+	if (variable)
+	{
+		while (s[i] != '\0')
+		{
+			if (s[i] == variable)
+				return ((char *) s + i);
+			i++;
+		}
+		return (0);
 	}
-	return (1);
+	else
+		return ((char *)s + ft_strlen(s));
 }
